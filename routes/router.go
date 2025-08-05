@@ -6,7 +6,10 @@ import (
     "github.com/gorilla/mux"
 )
 
-func SetupRouter(healthCheckHandler *handlers.HealthHandler) *mux.Router {
+func SetupRouter(healthCheckHandler *handlers.HealthHandler, 
+	userHandler *handlers.UserHandler, 
+	transferHandler *handlers.TransferHandler, 
+	transactionHandler *handlers.TransactionHandler) *mux.Router {
 /*
 userHandler *handlers.UserHandler, transactionHandler *handlers.TransactionHandler, transferHandler *handlers.TransferHandler 
 */
@@ -15,7 +18,7 @@ userHandler *handlers.UserHandler, transactionHandler *handlers.TransactionHandl
 	r := mux.NewRouter()
 
 	//public routes
-    //r.HandleFunc()
+    r.HandleFunc("/healthCheck", healthCheckHandler.HealthCheck)
 	//r.HandleFunc()
 
 	protected := r.PathPrefix("/").Subrouter()

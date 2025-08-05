@@ -5,12 +5,11 @@ import (
 	"net/http"
 	"vaqua/config"
 	"vaqua/db"
-	"vaqua/handlers"
+	"vaqua/repository"
 	"vaqua/routes"
-	//"vaqua/handlers"
-	//"vaqua/repository"
-	//"vaqua/service"
-	//"vaqua/routes"
+	"vaqua/handlers"
+	"vaqua/service"
+	
 )
 
 func main() {
@@ -22,25 +21,25 @@ config.LoadEnv()
 db.InitDb()
 
 // initialize the repo
-//userRepo := &repository.UserRepo{}
-//transferRepo := &repository.TransferRepo{}
-//transactionRepo := &repository.TransactionRepo{}
+userRepo := &repository.UserRepo{}
+transferRepo := &repository.TransferRepo{}
+transactionRepo := &repository.TransactionRepo{}
 
 // initialize the service
-//userService := &service.UserService{Repo: userRepo}
-//transferService := &service.TransferService{Repo: transferRepo}
-//transactionService := &service.TransactionService{Repo: transactionRepo}
+userService := &service.UserService{Repo: userRepo}
+transferService := &service.TransferService{Repo: transferRepo}
+transactionService := &service.TransactionService{Repo: transactionRepo}
 
 // initialize the handler 
-//userHandler := &handlers.UserHandler{Service: userService}
-//transferHandler := &handlers.TransferHandler{Service: transferService}
-//transactionHandler := &handlers.TransactionHandler{Service: transactionService}
+userHandler := &handlers.UserHandler{Service: userService}
+transferHandler := &handlers.TransferHandler{Service: transferService}
+transactionHandler := &handlers.TransactionHandler{Service: transactionService}
 
 healthHandler := &handlers.HealthHandler{}
 
 // define route
 
-router := routes.SetupRouter(healthHandler)
+router := routes.SetupRouter(healthHandler, userHandler, transferHandler, transactionHandler)
 
 
 

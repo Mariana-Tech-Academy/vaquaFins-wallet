@@ -1,10 +1,10 @@
 package repository
 
-import "vaqua/models"
+//import "vaqua/models"
 
 type TransferRepository interface {
-	CreateTransfer(transfer *models.Transfer) error
-	GetTransferByID(id uint) (models.Transfer, error)
+	//CreateTransfer(transfer *models.Transfer) error
+	//GetTransferByID(id uint) (models.Transfer, error)
 }
 
 type TransferRepo struct{}
