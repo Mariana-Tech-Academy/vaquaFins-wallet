@@ -3,23 +3,24 @@ package routes
 import (
 	// "net/http"
 	"vaqua/handlers"
-    "github.com/gorilla/mux"
+
+	"github.com/gorilla/mux"
 )
 
-func SetupRouter(healthCheckHandler *handlers.HealthHandler, 
-	userHandler *handlers.UserHandler, 
-	transferHandler *handlers.TransferHandler, 
+func SetupRouter(healthCheckHandler *handlers.HealthHandler,
+	userHandler *handlers.UserHandler,
+	transferHandler *handlers.TransferHandler,
 	transactionHandler *handlers.TransactionHandler) *mux.Router {
-/*
-userHandler *handlers.UserHandler, transactionHandler *handlers.TransactionHandler, transferHandler *handlers.TransferHandler 
-*/
-
+	/* can delete?
+	   userHandler *handlers.UserHandler, transactionHandler *handlers.TransactionHandler, transferHandler *handlers.TransferHandler
+	*/
 
 	r := mux.NewRouter()
 
 	//public routes
-    r.HandleFunc("/healthCheck", healthCheckHandler.HealthCheck)
-	//r.HandleFunc()
+	r.HandleFunc("/healthCheck", healthCheckHandler.HealthCheck)
+	r.HandleFunc("/register", userHandler.CreateUser).Methods("POST")
+	r.HandleFunc("/login", userHandler.LogIn).Methods("POST")
 
 	protected := r.PathPrefix("/").Subrouter()
 	protected.Use()
@@ -32,6 +33,5 @@ userHandler *handlers.UserHandler, transactionHandler *handlers.TransactionHandl
 	//protected.HandleFunc()
 	//protected.HandleFunc()
 	return r
-
 
 }

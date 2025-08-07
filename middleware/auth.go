@@ -11,19 +11,14 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-
-
-
 var secret = os.Getenv("JWT_SECRET")
 var jwtSecret = []byte(secret)
 
-
-
-func GenerateJWT(userID, role string) (string, error) {
+func GenerateJWT(userID uint) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
-		"role":   role,
-		"exp":    time.Now().Add(time.Hour * 24).Unix(),
+		//"role":   role,
+		"exp": time.Now().Add(time.Hour * 24).Unix(),
 	})
 
 	tokenString, err := token.SignedString(jwtSecret)
@@ -49,18 +44,15 @@ func VerifyJWT(tokenString string) (*jwt.Token, error) {
 	return token, nil
 }
 
-
-
-
-func AuthMiddleware(next http.HandlerFunc)http.HandlerFunc{
-	return func(w http.ResponseWriter, r *http.Request){
+func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
-		if authHeader == ""{
+		if authHeader == "" {
 			http.Error(w, "missing token", http.StatusUnauthorized)
 			return
 		}
 		parts := strings.Split(authHeader, "")
-		if len(parts) != 2 || parts[0] != "Bearer"{
+		if len(parts) != 2 || parts[0] != "Bearer" {
 			http.Error(w, "invalid token format", http.StatusUnauthorized)
 			return
 		}
@@ -68,31 +60,29 @@ func AuthMiddleware(next http.HandlerFunc)http.HandlerFunc{
 		//parse and validate the token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil , fmt.Errorf("invalid Token %v" , token.Header["alg"])
+				return nil, fmt.Errorf("invalid Token %v", token.Header["alg"])
 			}
 			return jwtSecret, nil
 		})
-		if err != nil || !token.Valid  {
-		  http.Error(w, "unexpected token", http.StatusUnauthorized)
-		  return
+		if err != nil || !token.Valid {
+			http.Error(w, "unexpected token", http.StatusUnauthorized)
+			return
 		}
 		// extract user Id from claims
-        claims , ok := token.Claims.(jwt.MapClaims)
+		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			 http.Error(w, "unable to extract the claims", http.StatusInternalServerError)
-			 return
+			http.Error(w, "unable to extract the claims", http.StatusInternalServerError)
+			return
 		}
-		userIDFloat , ok := claims["user_id"].(float64) 
+		userIDFloat, ok := claims["user_id"].(float64)
 		if !ok {
 			http.Error(w, "unable to extract user", http.StatusUnauthorized)
 			return
 		}
 		userID := uint(userIDFloat)
-        // add user id to context 
-		ctx := context.WithValue(r.Context(),"user_id", userID)
-        // moving to next protected endpoint
+		// add user id to context
+		ctx := context.WithValue(r.Context(), "user_id", userID)
+		// moving to next protected endpoint
 		next(w, r.WithContext(ctx))
-		}
 	}
-
-
+}

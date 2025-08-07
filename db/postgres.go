@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var Db *gorm.DB
+var DB *gorm.DB
 
 func InitDb() *gorm.DB {
 
@@ -30,21 +30,23 @@ func InitDb() *gorm.DB {
 		os.Getenv("DB_PORT"),
 	)
 
-	Db, err = gorm.Open(postgres.Open(connStr), &gorm.Config{})
+	//open DB
+	DB, err = gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println("connected to database successfully!")
 
-	err = Db.AutoMigrate(&models.User{}, &models.Transaction{},&models.Transfer{})
+	//migrate models to create db tables
+	err = DB.AutoMigrate(&models.User{}, &models.Transaction{}, &models.Transfer{})
 	if err != nil {
 		log.Fatal("failed to migrate schema", err)
 	}
-	return Db
+	return DB
 }
 
 func Ping() error {
-	sqlDB, err := Db.DB() // get underlying *sql.DB
+	sqlDB, err := DB.DB() // get underlying *sql.DB
 	if err != nil {
 		return err
 	}
