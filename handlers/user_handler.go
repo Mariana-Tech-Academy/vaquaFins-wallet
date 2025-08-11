@@ -17,7 +17,7 @@ type UserHandler struct {
 	Service *service.UserService
 }
 
-func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	var user models.User
 
@@ -27,7 +27,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// call the service layer
-	err = h.Service.CreateUser(&user)
+	err = h.Service.SignUp(&user)
 	if err != nil {
 		http.Error(w, "could not register user", http.StatusInternalServerError)
 		return

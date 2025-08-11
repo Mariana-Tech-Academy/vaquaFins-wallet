@@ -12,7 +12,7 @@ type UserService struct {
 	Repo repository.UserRepository
 }
 
-func (s *UserService) CreateUser(user *models.User) error {
+func (s *UserService) SignUp(user *models.User) error {
 	//check if user exist already
 	userExists, err := s.Repo.GetUserByEmail(user.Email)
 
@@ -31,7 +31,7 @@ func (s *UserService) CreateUser(user *models.User) error {
 	user.Password = hashpass
 
 	// call the create method
-	err = s.Repo.CreateUser(user)
+	err = s.Repo.SignUp(user)
 	if err != nil {
 		return err
 	}

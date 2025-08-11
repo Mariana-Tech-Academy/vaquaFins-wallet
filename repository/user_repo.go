@@ -13,13 +13,13 @@ import (
 
 type UserRepository interface {
 	GetUserByEmail(email string) (*models.User, error)
-	CreateUser(user *models.User) error
+	SignUp(user *models.User) error
 	//EditUser(user *models.User) error
 }
 
 type UserRepo struct{}
 
-func (r *UserRepo) CreateUser(user *models.User) error { //added pointer receiver to fix error in main.go
+func (r *UserRepo) SignUp(user *models.User) error { //added pointer receiver to fix error in main.go
 	err := db.DB.Create(user).Error
 	if err != nil {
 		return err
