@@ -19,7 +19,7 @@ func SetupRouter(healthCheckHandler *handlers.HealthHandler,
 
 	//public routes
 	r.HandleFunc("/healthCheck", healthCheckHandler.HealthCheck)
-	r.HandleFunc("/register", userHandler.SignUp).Methods("POST")
+	r.HandleFunc("/signup", userHandler.SignUp).Methods("POST")
 	r.HandleFunc("/login", userHandler.LogIn).Methods("POST")
 
 	protected := r.PathPrefix("/").Subrouter()
