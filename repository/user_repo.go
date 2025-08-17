@@ -39,5 +39,5 @@ func (r *UserRepo) GetUserByEmail(email string) (*models.User, error) {
 		return &models.User{}, err
 	}
 
-	return &user, nil // use found
+	return &user, nil // user found
 }

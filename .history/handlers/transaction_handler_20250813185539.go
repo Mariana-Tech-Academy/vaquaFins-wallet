@@ -13,9 +13,7 @@ type TransactionHandler struct {
 }
 
 func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Request) {
-
 	var transaction models.Transaction
-
 	err := json.NewDecoder(r.Body).Decode(&transaction)
 	if err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
@@ -34,9 +32,7 @@ func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Re
 }
 
 func (h *TransactionHandler) GetTransactions(w http.ResponseWriter, r *http.Request) {
-
 	var transaction models.Transaction
-
 	err := json.NewDecoder(r.Body).Decode(&transaction)
 	if err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
@@ -47,6 +43,5 @@ func (h *TransactionHandler) GetTransactions(w http.ResponseWriter, r *http.Requ
 		http.Error(w, "could not receive transaction(s)", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode((transaction))
+	w.WriteHeader(http.Status)
 }

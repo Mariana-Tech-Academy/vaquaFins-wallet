@@ -21,8 +21,7 @@ func SetupRouter(healthCheckHandler *handlers.HealthHandler,
 	r.HandleFunc("/healthCheck", healthCheckHandler.HealthCheck)
 	r.HandleFunc("/register", userHandler.CreateUser).Methods("POST")
 	r.HandleFunc("/login", userHandler.LogIn).Methods("POST")
-	r.HandleFunc("/transaction", transactionHandler.CreateTransaction).Methods("POST")
-	r.HandleFunc("/transaction", transactionHandler.GetTransactions).Methods("GET")
+	r.HandleFunc("/transaction", TransactionHandler.Transaction).Methods("GET")
 
 	//this is for retrieving all Transactions
 	// r.HandleFunc("/transaction", userHandler.Transaction).Methods("Get")

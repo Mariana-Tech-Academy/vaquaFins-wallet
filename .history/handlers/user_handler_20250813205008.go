@@ -32,11 +32,6 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "could not register user", http.StatusInternalServerError)
 		return
 	}
-	err = h.Service.CreateUser(&user)
-	if err == nil {
-		w.WriteHeader(http.StatusCreated)
-		http.Error(w, "user already exist", http.StatusAccepted)
-	}
 
 	//response
 	w.WriteHeader(http.StatusCreated)

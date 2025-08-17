@@ -1,4 +1,4 @@
-package db
+package handlers
 
 import (
 	"fmt"
@@ -11,13 +11,18 @@ import (
 	"gorm.io/gorm"
 )
 
+
+
+/*
+when the user logs out the database closes and the token immediate expires.
+
+*/
+
 var DB *gorm.DB
 
 func InitDb() *gorm.DB {
 
-	var err error
-
-	err = godotenv.Load()
+err = godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}
@@ -31,7 +36,7 @@ func InitDb() *gorm.DB {
 	)
 
 	//open DB
-	DB, err = gorm.Open(postgres.Open(connStr), &gorm.Config{})
+	DB, err = gorm.Close(postgres.Close(connStr), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
@@ -45,13 +50,3 @@ func InitDb() *gorm.DB {
 		log.Fatal("failed to migrate schema", err)
 	}
 	return DB
-}
-
-func Ping() error {
-	sqlDB, err := DB.DB() // get underlying *sql.DB
-	if err != nil {
-		return err
-	}
-	//ping the database.
-	return sqlDB.Ping()
-}
