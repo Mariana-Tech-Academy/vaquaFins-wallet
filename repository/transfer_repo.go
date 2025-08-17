@@ -12,7 +12,7 @@ type TransferRepository interface {
 	
 	FindAccount(AccountNum uint) (*models.Transfer, error)
 	UpdateBalance( acc *models.Transfer) error
-	//GetAccountBalance( AccountNum uint, UserID uint) (AccountBalance uint, err error)
+	
 }
 
 type TransferRepo struct{

@@ -1,8 +1,6 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 
 
@@ -15,5 +13,5 @@ type User struct {
 	Password       string        `json:"password" gorm:"not null"`
 	Transactions   []Transaction `json:"transactions" gorm:"foreignKey:UserID"`
 }
-	// Role           string        `json:"role" gorm:"no
+
 
