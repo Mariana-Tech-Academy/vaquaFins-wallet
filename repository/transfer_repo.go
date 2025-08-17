@@ -10,8 +10,8 @@ import (
 
 type TransferRepository interface {
 	
-	FindAccount(AccountNum uint) (*models.Account, error)
-	UpdateBalance( acc *models.Account) error
+	FindAccount(AccountNum uint) (*models.Transfer, error)
+	UpdateBalance( acc *models.Transfer) error
 	//GetAccountBalance( AccountNum uint, UserID uint) (AccountBalance uint, err error)
 }
 
@@ -21,8 +21,8 @@ type TransferRepo struct{
 
 //Find account numberid
 
-func(r *TransferRepo) FindAccount( AccountNum uint, UserID uint) (*models.Account, error){
-	var acc models.Account
+func(r *TransferRepo) FindAccount( AccountNum uint, UserID uint) (*models.Transfer, error){
+	var acc models.Transfer
 	result := r.db.Where("accountnum = ? and User_id = ?", AccountNum, UserID).First(&acc)
 	if result.Error!= nil{
 		return nil, result.Error
@@ -32,14 +32,7 @@ func(r *TransferRepo) FindAccount( AccountNum uint, UserID uint) (*models.Accoun
 }
 
 
-func (r*TransferRepo) UpdateBalance( acc *models.Account) error{
+func (r*TransferRepo) UpdateBalance( acc *models.Transfer) error{
 	return r.db.Save(acc).Error
 }
-/*func(r *TransferRepo) GetAccountBalance( AccountNum uint, UserID uint) (AccountBalance uint, err error){
-var bal models.Account
-balance:= db.Db.Where("account_balance=? and User_id=?",AccountBalance, UserID).First(&bal)
-if balance.Error!= nil{
-		return 0, balance.Error
-	}
-	return 0, nil
-	}*/
+

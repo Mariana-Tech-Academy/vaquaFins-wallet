@@ -13,9 +13,6 @@ type TransferHandler struct {
 
 
 
-
-//4)Returns either an error slip (4xx/5xx) or a success receipt with transfer_id.
-
 func(s *TransferHandler) TransferMoney(w http.ResponseWriter, r *http.Request){
 
 var accs models.Transfer
