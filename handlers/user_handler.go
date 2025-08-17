@@ -21,7 +21,7 @@ type UserHandler struct {
 
 func (u *UserHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
-	var user models.User
+	var user models.Account
 
 	err := json.NewDecoder(r.Body).Decode(&user)
     if err != nil {
@@ -39,7 +39,7 @@ func (u *UserHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(user)
 }
 func (u *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
-    var request models.User
+    var request models.Account
 
     err := json.NewDecoder(r.Body).Decode(&request)
     if err != nil {
