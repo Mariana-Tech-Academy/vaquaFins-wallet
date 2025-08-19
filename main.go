@@ -39,7 +39,8 @@ func main() {
 	// define route
 
 	transferHandler := &handlers.TransferHandler{}
-	router := routes.SetupRouter(healthHandler, userHandler,transferHandler, transactionHandler) //, transferHandler <--include after testing
+	IncomeAndExpensesHandler := &handlers.IncomeAndExpensesHandler{}
+	router := routes.SetupRouter(healthHandler, userHandler,transferHandler,transactionHandler,IncomeAndExpensesHandler) //, transferHandler <--include after testing
 
 	fmt.Println("server is running on localhost:8080...")
 	http.ListenAndServe(":8080", router)
