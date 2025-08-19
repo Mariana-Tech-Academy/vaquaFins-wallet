@@ -1,8 +1,8 @@
 package service
 
 import (
-	"fmt"
-	
+	"errors"
+	"vaqua/models"
 	"vaqua/repository"
 )
 
@@ -10,42 +10,35 @@ type TransferService struct {
 	Repo repository.TransferRepository
 }
 
-
-//Holds business rules: ownership, balance, amount.
-
- func( t *TransferService) TransferMoney(AccountNum, RecipientID uint ,Amount int64 ) error{
+// Holds business rules: ownership, balance, amount.
+func (s *TransferService) TransferMoney(transfer *models.Transfer) error {
 
 	//1) Ask repo: “Give me account 123 (the from-account)
-	fromAccount, err := t.Repo.FindAccount(AccountNum)
-	if err != nil{
+	fromAccount, err := s.Repo.FindAccount(transfer.AccountNum)
+	if err != nil {
 		return err
 	}
-	toAccount, err := t.Repo.FindAccount(RecipientID)
-//Check if amount > 0.
-
-	if fromAccount.AccountBalance < int(Amount){
-	return fmt.Errorf("not enough funds")
+	toAccount, err := s.Repo.FindAccount(transfer.RecipientAccountNumber)
+	if err != nil {
+		return err
 	}
+	//Check if amount > 0.
+	if fromAccount.AccountBalance < (transfer.Amount) {
+		return errors.New("not enough funds")
+	}
+	fromAccount.AccountBalance -= (transfer.Amount)
+	toAccount.AccountBalance += (transfer.Amount)
 
-	fromAccount.AccountBalance -= int(Amount)
-	toAccount.AccountBalance += int(Amount)
-
-	err= t.Repo.UpdateBalance(fromAccount)
-	if err!= nil{
+	err = s.Repo.UpdateBalance(fromAccount)
+	if err != nil {
 		return err
 	}
 
-	err = t.Repo.UpdateBalance(toAccount)
-	if err!= nil{
+	err = s.Repo.UpdateBalance(toAccount)
+	if err != nil {
 		return err
 	}
 
 	return nil
-	
 
-	
-
-
-	}
- 
-
+}

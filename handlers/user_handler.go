@@ -36,43 +36,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusCreated)
     json.NewEncoder(w).Encode(user)
 }
-func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
-    var request models.User
 
-
-    err := json.NewDecoder(r.Body).Decode(&request)
-    if err != nil {
-        http.Error(w, "invalid request body", http.StatusBadRequest)
-        return
-    }
-    token, err := h.Service.LogInUser(request)     
-    if err != nil {
-        http.Error(w, "invalid credentials", http.StatusInternalServerError)
-        return
-    }
-    //response
-    w.WriteHeader(http.StatusOK)
-    json.NewEncoder(w).Encode(token)
-	if err != nil {
-		http.Error(w, "invalid request body", http.StatusBadRequest)
-		return
-	}
-	// call the service layer
-	err = h.Service.CreateUser(&user)
-	if err != nil {
-		http.Error(w, "could not register user", http.StatusInternalServerError)
-		return
-	}
-	err = h.Service.CreateUser(&user)
-	if err == nil {
-		w.WriteHeader(http.StatusCreated)
-		http.Error(w, "user already exist", http.StatusAccepted)
-	}
-
-	//response
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(user)
-}
 
 func (h *UserHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	var request models.User
@@ -84,7 +48,7 @@ func (h *UserHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	}
 	token, err := h.Service.LogInUser(request)
 	if err != nil {
-		http.Error(w, "invalid credentials", http.StatusInternalServerError)
+		http.Error(w, "invalid credentials", 401)
 		return
 	}
 

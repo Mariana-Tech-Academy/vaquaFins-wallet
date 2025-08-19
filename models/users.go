@@ -6,7 +6,7 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	AccountNum     uint          `json:"accountnum" gorm:"unique;not null"`
+	AccountNum     uint          `json:"accountnum" gorm:"unique;"`
 	AccountBalance int           `json:"account_balance"`
 	Name           string        `json:"name" gorm:"unique;not null"`
 	Email          string        `json:"email" gorm:"unique;not null"`
