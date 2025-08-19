@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"time"
 	"vaqua/models"
 
 	"errors"
@@ -15,6 +16,7 @@ type UserRepository interface {
 	GetUserByEmail(email string) (*models.User, error)
 	CreateUser(user *models.User) error
 	//EditUser(user *models.User) error
+	BlacklistToken(jti string, expiresAt time.Time) error
 }
 
 type UserRepo struct{}
@@ -41,3 +43,32 @@ func (r *UserRepo) GetUserByEmail(email string) (*models.User, error) {
 
 	return &user, nil // user found
 }
+
+// BlacklistToken adds a JWT to a blacklist table
+func (r *UserRepo) BlacklistToken(jti string, expiresAt time.Time) error {
+	blacklistedToken := &models.BlacklistedToken{
+		JTI:       jti,
+		ExpiresAt: expiresAt,
+	}
+	err := db.DB.Create(blacklistedToken).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *UserRepo) IsTokenBlacklisted(jti string) (bool, error) {
+	var token models.BlacklistedToken
+	result := db.DB.Where("jti = ?", jti).First(&token)
+
+	if result.RowsAffected > 0 {
+		return true, nil
+	}
+
+	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
+		return false, result.Error
+	}
+
+	return false, nil
+}
+
