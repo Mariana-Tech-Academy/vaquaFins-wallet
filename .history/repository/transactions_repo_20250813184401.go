@@ -25,16 +25,14 @@ func (r *TransactionRepo) CreateTransaction(transaction *models.Transaction) err
 }
 
 func (r *TransactionRepo) GetTransactionByID(UserID uint) (*models.Transaction, error) {
-
 	var transaction models.Transaction
-	err := db.DB.Where("user_id = ?", UserID).Find(&transaction).Error
+	err := db.DB.Where("UserID = ?", UserID).First(&transaction).Error
 	if err != nil {
 		return &models.Transaction{}, err
 	}
 	return &transaction, nil
 }
 
-//do we need to delete a transaction.
 // func (r *TransactionRepo) DeleteTransaction(transaction *models.Transaction) error {
 // 	err := db.DB.Delete(transaction).Error
 // 	if err != nil {
