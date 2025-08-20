@@ -37,8 +37,14 @@ func InitDb() *gorm.DB {
 	}
 	fmt.Println("connected to database successfully!")
 
+
 	//migrate models to create db tables
-	err = DB.AutoMigrate(&models.User{}, &models.Transaction{}, &models.Transfer{})
+	err = DB.AutoMigrate(&models.User{},
+		&models.Transaction{},
+		&models.Transfer{},
+		&models.IncomeAndExpenses{},
+		&models.BlacklistedToken{},
+	)
 	if err != nil {
 		log.Fatal("failed to migrate schema", err)
 	}
@@ -50,5 +56,6 @@ func Ping() error {
 	if err != nil {
 		return err
 	}
+	//ping the database.
 	return sqlDB.Ping()
 }
