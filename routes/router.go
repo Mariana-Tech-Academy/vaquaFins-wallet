@@ -34,9 +34,6 @@ func SetupRouter(healthCheckHandler *handlers.HealthHandler,
 	//protected.Handle()
 	//protected.Handle()
 
-	//Authenticated user routes
-	//protected.HandleFunc()
-	//protected.HandleFunc()
 	return r
 
 }
