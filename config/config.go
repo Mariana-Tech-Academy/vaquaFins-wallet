@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-//This function loads enviromental variables from .env file
+//This function loads environmental variables from .env file
 
 func LoadEnv() {
 

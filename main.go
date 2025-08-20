@@ -21,25 +21,26 @@ func main() {
 
 	// initialize the repo
 	userRepo := &repository.UserRepo{}
-	transferRepo := &repository.TransferRepo{}
+	//transferRepo := &repository.TransferRepo{}
 	transactionRepo := &repository.TransactionRepo{}
+	//profileRepo := &repository.ProfileRepo{}
 
 	// initialize the service
 	userService := &service.UserService{Repo: userRepo}
-	transferService := &service.TransferService{Repo: transferRepo}
+	//transferService := &service.TransferService{Repo: transferRepo}
 	transactionService := &service.TransactionService{Repo: transactionRepo}
+	//profileService := &service.ProfileService{Repo: profileRepo}
 
 	// initialize the handler
 	userHandler := &handlers.UserHandler{Service: userService}
-	transferHandler := &handlers.TransferHandler{Service: transferService}
+	//transferHandler := &handlers.TransferHandler{Service: transferService}
 	transactionHandler := &handlers.TransactionHandler{Service: transactionService}
-
+	//profileHandler := &handlers.ProfileHandler{Service: profileService}
 	healthHandler := &handlers.HealthHandler{}
 
 	// define route
+	router := routes.SetupRouter(healthHandler, userHandler,  transactionHandler) //transferHandler,, profileHandler
 
-	router := routes.SetupRouter(healthHandler, userHandler, transferHandler, transactionHandler)
-
-	fmt.Println("server is running on localhost:8080...")
+	fmt.Println("server is running on http://localhost:8080...")
 	http.ListenAndServe(":8080", router)
 }

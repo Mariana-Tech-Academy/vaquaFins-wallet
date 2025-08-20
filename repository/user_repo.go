@@ -14,13 +14,14 @@ import (
 type UserRepository interface {
 	GetUserByEmail(email string) (*models.User, error)
 	CreateUser(user *models.User) error
-	//EditUser(user *models.User) error
+	
 }
 
 type UserRepo struct{}
 
 func (r *UserRepo) CreateUser(user *models.User) error { //added pointer receiver to fix error in main.go
 	err := db.DB.Create(user).Error
+
 	if err != nil {
 		return err
 	}
@@ -39,5 +40,5 @@ func (r *UserRepo) GetUserByEmail(email string) (*models.User, error) {
 		return &models.User{}, err
 	}
 
-	return &user, nil // use found
+	return &user, nil // user found
 }

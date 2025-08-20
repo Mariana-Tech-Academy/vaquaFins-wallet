@@ -7,12 +7,6 @@ import (
 	"vaqua/service"
 )
 
-// handler layer (handles (http request& reponse) and call the service layer)
-//		|
-// service layer (business logic and calls the repository layer)
-// 		|
-// repository layer (handles direct database operations)
-
 type UserHandler struct {
 	Service *service.UserService
 }
@@ -26,11 +20,16 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
-	// call the service layer
+	// calls the service layer
 	err = h.Service.CreateUser(&user)
 	if err != nil {
 		http.Error(w, "could not register user", http.StatusInternalServerError)
 		return
+	}
+	err = h.Service.CreateUser(&user)
+	if err == nil {
+		w.WriteHeader(http.StatusCreated)
+		http.Error(w, "user already exist", http.StatusAccepted)
 	}
 
 	//response
