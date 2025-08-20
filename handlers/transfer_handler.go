@@ -21,14 +21,7 @@ func (h *TransferHandler) TransferMoney(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	err = h.Service.TransferMoney(&accs)
-	// err = h.Service.TransferMoney(&models.Transfer{
-	// 	UserID:                 accs.UserID,
-	// 	AccountNum:             accs.AccountNum,
-	// 	AccountBalance:         accs.AccountBalance,
-	// 	RecipientAccountNumber: accs.RecipientAccountNumber,
-	// 	Amount:                 accs.Amount,
-	// 	Description:            accs.Description,
-	// })
+
 	
 	if err != nil {
 		http.Error(w, "unable to transfer money", http.StatusBadGateway)

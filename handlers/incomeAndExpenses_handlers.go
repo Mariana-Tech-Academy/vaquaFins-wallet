@@ -14,7 +14,7 @@ type IncomeAndExpensesHandler struct {
 }
 
 func (h *IncomeAndExpensesHandler) GetSummary(w http.ResponseWriter, r *http.Request) {
-	// Expect URL like: /accounts/1/summary
+
 	parts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 	if len(parts) != 3 || parts[0] != "accounts" || parts[2] != "summary" {
 		http.Error(w, "invalid path", http.StatusBadRequest)

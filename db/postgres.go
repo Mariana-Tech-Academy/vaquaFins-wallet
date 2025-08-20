@@ -41,7 +41,10 @@ func InitDb() *gorm.DB {
 	//migrate models to create db tables
 	err = DB.AutoMigrate(&models.User{},
 		&models.Transaction{},
-		&models.Transfer{})
+		&models.Transfer{},
+		&models.IncomeAndExpenses{},
+		&models.BlacklistedToken{},
+	)
 	if err != nil {
 		log.Fatal("failed to migrate schema", err)
 	}

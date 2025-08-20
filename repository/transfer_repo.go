@@ -6,36 +6,46 @@ import (
 )
 
 type TransferRepository interface {
-	FindAccount(AccountNum uint) (*models.Transfer, error)
+	FindAccountByUser(UserID uint,AccountNum uint) (*models.Transfer, error)
+	FindRecipientAccount(RecipientAccountNumber uint) (*models.Transfer, error)
+	CreateTransfer(t *models.Transfer) error
 	UpdateBalance(acc *models.Transfer) error
-	CreateTransfer(Amount uint) (*models.Transfer, error)
+	 
 }
 
 type TransferRepo struct {
 }
 
-//Find account numberid
-
-func (r *TransferRepo) FindAccount(AccountNum uint) (*models.Transfer, error) {
-
-	var acc models.Transfer
-	result := db.DB.Where("accountnum = ? and User_id = ?", AccountNum).First(&acc)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &acc, nil
+func (r *TransferRepo) FindAccountByUser(userID uint, accountNum uint) (*models.Transfer, error) {
+    var acc models.Transfer
+    result := db.DB.Where("account_num = ? AND user_id = ?", accountNum, userID).First(&acc)
+    if result.Error != nil {
+        return nil, result.Error
+    }
+    return &acc, nil
 }
-func (r *TransferRepo) CreateTransfer(Amount uint) (*models.Transfer, error) {
-	newTransfer := &models.Transfer{
-		Amount: Amount,
-	}
-	err := db.DB.Create(newTransfer).Error
-	if err != nil {
-		return nil, err
-	}
-	return newTransfer, nil
+
+func (r *TransferRepo) FindRecipientAccount(RecipientAccountNumber uint) (*models.Transfer, error) {
+    var acc models.Transfer
+    result := db.DB.Where("recipient_account_number = ?", RecipientAccountNumber).First(&acc)
+    if result.Error != nil {
+        return nil, result.Error
+    }
+    return &acc, nil
+}
+
+
+func (r *TransferRepo) CreateTransfer(t *models.Transfer) error {
+	return db.DB.Create(t).Error
 }
 
 func (r *TransferRepo) UpdateBalance(acc *models.Transfer) error {
-	return db.DB.Save(acc).Error
+    return db.DB.
+        Model(&models.Transfer{}).
+        Where("account_num = ?", acc.AccountNum).
+        Update("account_balance", acc.AccountBalance).Error
 }
+
+	
+	
+	

@@ -3,6 +3,7 @@ package repository
 import (
 	"time"
 	"vaqua/db"
+	"vaqua/models"
 )
 
 type IncomeAndExpensesRepository interface {
@@ -19,9 +20,10 @@ type IncomeAndExpensesRepo struct {
 
 func (r *IncomeAndExpensesRepo) SumByType(accountID int64, kind string, from, to *time.Time) (float64, error) {
 	var total float64 
-	q := db.DB.Table("transactions").
-		Select("COALESCE(SUM(amount),0)").
-		Where("account_id = ? AND type = ?", accountID, kind)
+	q := db.DB.Model(&models.IncomeAndExpenses{}).
+    Select("COALESCE(SUM(amount), 0)").
+    Where("account_id = ? AND type = ?", accountID, kind)
+
 
 	if from != nil {
 		q = q.Where("created_at >= ?", *from)
