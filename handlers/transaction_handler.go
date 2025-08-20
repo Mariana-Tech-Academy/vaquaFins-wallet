@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"vaqua/models"
 	"vaqua/service"
@@ -25,8 +26,10 @@ func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Re
 	err = h.Service.CreateTransaction(&transaction)
 	if err != nil {
 		http.Error(w, "could not create transaction", http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
+
 	//response
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(transaction)
@@ -44,9 +47,10 @@ func (h *TransactionHandler) GetTransactions(w http.ResponseWriter, r *http.Requ
 	}
 	err = h.Service.GetTransactions(&transaction)
 	if err != nil {
-		http.Error(w, "could not receive transaction(s)", http.StatusInternalServerError)
+		http.Error(w, "transaction not found", http.StatusNotFound)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode((transaction))
+	log.Println("Transaction found:", transaction)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(transaction)
 }

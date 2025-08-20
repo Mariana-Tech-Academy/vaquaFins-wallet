@@ -9,8 +9,10 @@ import (
 
 func SetupRouter(healthCheckHandler *handlers.HealthHandler,
 	userHandler *handlers.UserHandler,
-	// transferHandler *handlers.TransferHandler,
-	transactionHandler *handlers.TransactionHandler) *mux.Router {
+	//transferHandler *handlers.TransferHandler,
+	//profileHandler *handlers.ProfileHandler,
+	transactionHandler *handlers.TransactionHandler,) *mux.Router {
+	
 	/* can delete?
 	   userHandler *handlers.UserHandler, transactionHandler *handlers.TransactionHandler, transferHandler *handlers.TransferHandler
 	*/
@@ -23,6 +25,10 @@ func SetupRouter(healthCheckHandler *handlers.HealthHandler,
 	r.HandleFunc("/login", userHandler.LogIn).Methods("POST")
 	r.HandleFunc("/transaction", transactionHandler.CreateTransaction).Methods("POST")
 	r.HandleFunc("/transaction", transactionHandler.GetTransactions).Methods("GET")
+	// r.HandleFunc("/transfer", transferHandler.TransferMoney).Methods("POST")
+	// r.HandleFunc("/profile", profileHandler.UpdateProfile).Methods("PUT")
+	// r.HandleFunc("/profile", profileHandler.GetProfile).Methods("GET")
+	// r.HandleFunc("/profile", profileHandler.DeleteProfile).Methods("DELETE")
 
 	//this is for retrieving all Transactions
 	// r.HandleFunc("/transaction", userHandler.Transaction).Methods("Get")
