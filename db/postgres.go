@@ -52,7 +52,7 @@ func InitDb() *gorm.DB {
 }
 
 func Ping() error {
-	sqlDB, err := DB.DB() // get underlying *sql.DB
+	sqlDB, err := DB.DB() 
 	if err != nil {
 		return err
 	}
