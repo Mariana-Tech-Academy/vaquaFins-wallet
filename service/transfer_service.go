@@ -12,7 +12,7 @@ type TransferService struct {
 
 func (s *TransferService) TransferMoney(transfer *models.Transfer) error {
     // sender must match user_id + account_num(sender must own the account)
-    fromAccount, err := s.Repo.FindAccountByUser(transfer.UserID, transfer.AccountNum)
+    fromAccount, err := s.Repo.FindAccountByUser(transfer.UserID, transfer.FromAccountNum)
     if err != nil {
         return err
     }
@@ -46,5 +46,6 @@ func (s *TransferService) TransferMoney(transfer *models.Transfer) error {
     }
 
     return nil
+    
 }
 

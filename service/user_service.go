@@ -1,4 +1,3 @@
-
 package service
 
 import (
@@ -9,12 +8,13 @@ import (
 	"vaqua/models"
 	"vaqua/repository"
 	"vaqua/utils"
-
 	"github.com/golang-jwt/jwt/v5"
+	
 )
 
 type UserService struct {
-	Repo repository.UserRepository
+	Repo repository.UserRepository; 
+	
 }
 
 func (s *UserService) CreateUser(user *models.User) error {
@@ -34,14 +34,67 @@ func (s *UserService) CreateUser(user *models.User) error {
 		return err
 	}
 	user.Password = hashpass
-
+ accNum, err:= utils.Generate9Digit()
+ if err != nil{
+	return err
+ }
 	// call the create method
-	err = s.Repo.CreateUser(user)
+	err = s.Repo.CreateUser(user,accNum)
 	if err != nil {
 		return err
 	}
 	return nil
 }
+
+/*func (s *UserService) CreateAccountForUser(UserId uint) (models.Account, error){
+	var accCreated *models.Account
+	err:= db.DB.Transaction(func(acct *gorm.DB) error{
+		const tries = 5
+		for i := 0; i< tries; i++{
+			num, err := utils.Generate9Digit()
+			if err!= nil{
+			return err
+		}
+
+		acc :=&models.Account{
+			UserId: UserId,
+			AccountNum: num,
+			AccountBalance: 0,
+		}
+
+		if err:= s.AccountRepo.Create(acc); err !=nil{
+			if isUniqueErr(err) && i < tries-1 {
+				continue
+			}
+			return err
+		}
+		accCreated= acc
+		return nil
+	}
+		return errors.New ("failed to create unique account number")
+	})
+	return *accCreated, err
+}
+
+func isUniqueErr(err error) bool {
+	if err == nil{
+		return false
+	}
+	return 
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // check if user is in db
 // compare password

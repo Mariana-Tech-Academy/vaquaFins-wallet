@@ -14,15 +14,24 @@ import (
 
 type UserRepository interface {
 	GetUserByEmail(email string) (*models.User, error)
-	CreateUser(user *models.User) error
+	CreateUser(user *models.User,accountNum string ) error 
 	//EditUser(user *models.User) error
 	BlacklistToken(jti string, expiresAt time.Time) error
 }
 
 type UserRepo struct{}
 
-func (r *UserRepo) CreateUser(user *models.User) error { //added pointer receiver to fix error in main.go
+func (r *UserRepo) CreateUser(user *models.User,accountNum string ) error { //added pointer receiver to fix error in main.go
 	err := db.DB.Create(user).Error
+	if err != nil {
+		return err
+	}
+	acc := &models.Account{
+		UserId: user.ID,
+		AccountNum: accountNum,
+	}
+
+	err = db.DB.Create(&acc).Error
 	if err != nil {
 		return err
 	}
