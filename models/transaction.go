@@ -1,11 +1,11 @@
 package models
 
-import "gorm.io/gorm"
-
 type Transaction struct {
-	gorm.Model
-	UserID      uint    `json:"user_id" gorm:"not null"`
-	Type        string  `json:"type" gorm:"not null"`
-	Amount      float64 `json:"amount" gorm:"not null"`
-	RecipientID uint    `json:"recipient_id" gorm:"not null"`
+	ID          uint    `json:"id" gorm:"primaryKey"`
+	UserID      uint    `json:"user_id"`
+	Amount      float64 `json:"amount"`
+	Type        string  `json:"type"` // "income" or "expense"
+	Category    string  `json:"category"` // "groceries" or "rent"
+	Description string  `json:"description"`
+	Date        string  `json:"date"`
 }
