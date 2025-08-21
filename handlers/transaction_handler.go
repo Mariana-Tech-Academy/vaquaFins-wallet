@@ -30,6 +30,7 @@ func (h *TransactionHandler) GetTransaction(w http.ResponseWriter, r *http.Reque
 	}
 	//tx is for the transaction from database
 	log.Println("Transaction found:", tx)
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(tx)
 }
@@ -37,20 +38,21 @@ func (h *TransactionHandler) GetTransaction(w http.ResponseWriter, r *http.Reque
 // GetTransactionsByUserID handles GET requests to retrieve transactions by user ID
 func (h *TransactionHandler) GetTransactionsByUserID(w http.ResponseWriter, r *http.Request) {
 
-	var userID uint
-	err := json.NewDecoder(r.Body).Decode(&userID)
+	var transaction models.Transaction
+	err := json.NewDecoder(r.Body).Decode(&transaction)
 	if err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	transactions, err := h.Service.GetTransactionsByUserID(userID)
+	transactions, err := h.Service.GetTransactionsByUserID(transaction.UserID)
 	if err != nil {
 		http.Error(w, "transactions not found", http.StatusNotFound)
 		return
 	}
 
-	log.Println("Transactions found for user ID", userID, ":", transactions)
+	log.Println("Transactions found for user ID", transaction.UserID, ":", transactions)
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(transactions)
 }
