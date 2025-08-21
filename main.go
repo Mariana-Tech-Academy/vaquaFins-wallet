@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"vaqua/config"
 	"vaqua/db"
@@ -12,34 +12,28 @@ import (
 )
 
 func main() {
-
-	// Loading up variables
+	// Load environment variables
 	config.LoadEnv()
 
-	// connect to database
+	// Initialize database
 	db.InitDb()
 
-	// initialize the repo
+	// Initialize repositories
 	userRepo := &repository.UserRepo{}
-	// transferRepo := &repository.TransferRepo{}
 	transactionRepo := &repository.TransactionRepo{}
 
-	// initialize the service
+	// Initialize services
 	userService := &service.UserService{Repo: userRepo}
-	// transferService := &service.TransferService{Repo: transferRepo}
 	transactionService := &service.TransactionService{Repo: transactionRepo}
 
-	// initialize the handler
+	// Initialize handlers
 	userHandler := &handlers.UserHandler{Service: userService}
-	// transferHandler := &handlers.TransferHandler{Service: transferService}
 	transactionHandler := &handlers.TransactionHandler{Service: transactionService}
-
 	healthHandler := &handlers.HealthHandler{}
 
-	// define route
+	// Setup routes
+	router := routes.SetupRouter(healthHandler, userHandler, transactionHandler)
 
-	router := routes.SetupRouter(healthHandler, userHandler, transactionHandler) //, transferHandler <--include after testing
-
-	fmt.Println("server is running on localhost:8080...")
+	log.Println("Server is running on http://localhost:8080...")
 	http.ListenAndServe(":8080", router)
 }

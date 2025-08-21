@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"vaqua/models"
 	"vaqua/service"
@@ -12,8 +13,8 @@ type TransactionHandler struct {
 	Service *service.TransactionService
 }
 
-func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Request) {
-
+func (h *TransactionHandler) GetTransaction(w http.ResponseWriter, r *http.Request) {
+	//request bodyis decoded into transaction struct
 	var transaction models.Transaction
 
 	err := json.NewDecoder(r.Body).Decode(&transaction)
@@ -21,32 +22,35 @@ func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Re
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
-	//call the service_layer
-	err = h.Service.CreateTransaction(&transaction)
+	//returns tx from the database
+	tx, err := h.Service.GetTransactions(&transaction)
 	if err != nil {
-		http.Error(w, "could not create transaction", http.StatusInternalServerError)
+		http.Error(w, "transaction not found", http.StatusNotFound)
 		return
 	}
-	//response
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(transaction)
-
+	//tx is for the transaction from database
+	log.Println("Transaction found:", tx)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(tx)
 }
 
-func (h *TransactionHandler) GetTransactions(w http.ResponseWriter, r *http.Request) {
+// GetTransactionsByUserID handles GET requests to retrieve transactions by user ID
+func (h *TransactionHandler) GetTransactionsByUserID(w http.ResponseWriter, r *http.Request) {
 
-	var transaction models.Transaction
-
-	err := json.NewDecoder(r.Body).Decode(&transaction)
+	var userID uint
+	err := json.NewDecoder(r.Body).Decode(&userID)
 	if err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
-	err = h.Service.GetTransactions(&transaction)
+
+	transactions, err := h.Service.GetTransactionsByUserID(userID)
 	if err != nil {
-		http.Error(w, "could not receive transaction(s)", http.StatusInternalServerError)
+		http.Error(w, "transactions not found", http.StatusNotFound)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode((transaction))
+
+	log.Println("Transactions found for user ID", userID, ":", transactions)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(transactions)
 }

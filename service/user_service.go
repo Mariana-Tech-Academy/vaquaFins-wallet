@@ -38,9 +38,6 @@ func (s *UserService) CreateUser(user *models.User) error {
 	return nil
 }
 
-// check if user is in db
-// compare password
-// generate token
 func (s *UserService) LogInUser(request models.User) (string, error) {
 	user, err := s.Repo.GetUserByEmail(request.Email)
 	if err != nil {
