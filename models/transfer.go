@@ -7,9 +7,9 @@ type Transfer struct {
     gorm.Model // gives you ID, CreatedAt, UpdatedAt, DeletedAt
     UserID                 uint   `json:"user_id" gorm:"not null"`
     FromAccountNum         string   `json:"from_account_num" gorm:"not null"`
-    AccountBalance         uint   `json:"account_balance" gorm:"not null"`
+    AccountBalance         float64   `json:"account_balance" gorm:"not null"`
     RecipientAccountNumber string   `json:"recipient_account_number" gorm:"not null"`
-    Amount                 uint   `json:"amount" gorm:"not null"`
+    Amount                 float64   `json:"amount" gorm:"not null"`
     Description            string `json:"description" gorm:"not null"`
 }
 

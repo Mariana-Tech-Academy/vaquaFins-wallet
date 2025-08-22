@@ -7,7 +7,7 @@ type Transaction struct {
 	UserID                 uint    `json:"user_id" gorm:"not null"`
 	Type                   string  `json:"type" gorm:"not null"`
 	Amount                 float64 `json:"amount" gorm:"not null"`
-	RecipientAccountNumber uint    `json:"recipient_account_number"`
+	RecipientAccountNumber string    `json:"recipient_account_number"`
 	Description            string  `json:"description"`
 }
 

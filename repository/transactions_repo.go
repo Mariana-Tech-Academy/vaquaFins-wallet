@@ -8,6 +8,7 @@ import (
 type TransactionRepository interface {
 	GetTransactionByID(id uint) (*models.Transaction, error)
 	GetTransactionsByUserID(userID uint, transactions *[]models.Transaction) error
+	CreateTransaction(transaction *models.Transaction) error
 }
 type TransactionRepo struct {
 }
@@ -27,6 +28,15 @@ func (r *TransactionRepo) GetTransactionsByUserID(userID uint, transactions *[]m
 		return err
 	}
 	return nil
+}
+
+func (r *TransactionRepo) CreateTransaction(transaction *models.Transaction) error {
+	err := db.DB.Create(transaction).Error
+	if err != nil {
+		return err
+	}
+	return nil
+
 }
 
 

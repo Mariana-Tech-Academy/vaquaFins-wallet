@@ -46,6 +46,7 @@ func (r *TransferRepo) UpdateBalance(acc *models.Transfer) error {
         Update("account_balance", acc.AccountBalance).Error
 }
 
+
 	
 	
 	
