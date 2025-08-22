@@ -8,7 +8,7 @@ type User struct {
 	Email    string    `json:"email" gorm:"uniqueIndex;not null"`
 	Password string    `json:"password" gorm:"not null"`
 	Account  *Account `gorm:"foreignKey:UserId;references:ID" json:”account”`
-	
+	Transactions   []Transaction `json:"transactions" gorm:"foreignKey:UserID"`
 }
 
 /*type User struct {

@@ -4,10 +4,13 @@ import (
 	"errors"
 	"vaqua/models"
 	"vaqua/repository"
+    
+	
 )
 
 type TransferService struct {
 	Repo repository.TransferRepository
+   
 }
 
 func (s *TransferService) TransferMoney(transfer *models.Transfer) error {
@@ -46,6 +49,5 @@ func (s *TransferService) TransferMoney(transfer *models.Transfer) error {
     }
 
     return nil
-    
-}
 
+}
