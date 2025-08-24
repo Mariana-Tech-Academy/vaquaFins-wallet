@@ -40,6 +40,7 @@ func InitDb() *gorm.DB {
 
 	//migrate models to create db tables
 	err = DB.AutoMigrate(&models.User{},
+		&models.Account{},
 		&models.Transaction{},
 		&models.Transfer{},
 		&models.IncomeAndExpenses{},

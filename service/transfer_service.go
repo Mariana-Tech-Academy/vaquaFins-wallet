@@ -2,8 +2,11 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"vaqua/models"
 	"vaqua/repository"
+
+	"gorm.io/gorm"
 )
 
 type TransferService struct {
@@ -14,15 +17,34 @@ type TransferService struct {
 func (s *TransferService) TransferMoney(transfer *models.Transfer) error {
 	// sender must match user_id + account_num(sender must own the account)
 	fromAccount, err := s.Repo.FindAccountByUser(transfer.UserID, transfer.FromAccountNum)
-	if err != nil {
+	if err != nil{
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return fmt.Errorf("sender account not found")
+		}
 		return err
+
+	}
+	if fromAccount == nil {
+		return fmt.Errorf("sender account lookup returned nil")
 	}
 
+	//}
+
+	//if err != nil {
+		//return err
 	// recipient: look up by account_num only
 	toAccount, err := s.Repo.FindRecipientAccount(transfer.RecipientAccountNumber)
-	if err != nil {
+	if err != nil{
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return fmt.Errorf("sender account not found")
+		}
 		return err
+
 	}
+	if fromAccount == nil {
+		return fmt.Errorf("sender account lookup returned nil")
+	}
+
 
 	if fromAccount.AccountBalance < transfer.Amount {
 		return errors.New("not enough funds")

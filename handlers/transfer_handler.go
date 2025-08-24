@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"vaqua/models"
 	"vaqua/service"
@@ -17,7 +18,8 @@ func (h *TransferHandler) TransferMoney(w http.ResponseWriter, r *http.Request) 
 	
 	err := json.NewDecoder(r.Body).Decode(&accs)
 	if err != nil {
-		http.Error(w, "unable to decode", http.StatusBadRequest)
+		http.Error(w, "unable to decode1", http.StatusBadRequest)
+		log.Println(err)
 		return
 	}
 	err = h.Service.TransferMoney(&accs)
@@ -25,6 +27,7 @@ func (h *TransferHandler) TransferMoney(w http.ResponseWriter, r *http.Request) 
 	
 	if err != nil {
 		http.Error(w, "unable to transfer money", http.StatusBadGateway)
+		log.Println(err)
 		return
 	}
 

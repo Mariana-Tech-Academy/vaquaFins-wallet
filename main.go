@@ -31,7 +31,12 @@ func main() {
 	//transferService := &service.TransferService{Repo: transferRepo}
 	transactionService := &service.TransactionService{Repo: transactionRepo}
 	incomeAndExpensesService:=&service.IncomeAndExpensesService{Repo: incomeAndExpensesRepo}
-	transferService:= &service.TransferService{Repo: transferRepo}
+	transferService:= &service.TransferService{
+		Repo: transferRepo,
+		Trepo: transactionRepo, //
+	
+	
+	}
 
 	// initialize the handler
 	userHandler := &handlers.UserHandler{Service: userService}
